@@ -324,41 +324,7 @@
                 $.colorbox.close();
             });
         },
-        /**
-         * [loadData description]
-         * @param  {[type]}
-         * @return {[type]}
-         */
-        loadData: function(retailerArr) {
-            var that = this,
-                opts = that.options,
-                retailerId = retailerArr[0];
-
-            that.leftView.searchLoading.show();
-            $.ajax({
-                url: "/admin/guides/retailer_products",
-                data: { retailer_id: retailerId },
-                cache: false,
-                dataType: "json",
-                success: function(items) {
-                    var available_products = [];
-                    $.each(items, function(index, item) {
-                        if (!that.rightView.contains(item.id)) {
-                            available_products.push(item);
-                        }
-                    });
-                    that.leftView.bindProducts(available_products);
-                },
-                error: function() {
-                    alert("There is network error, check your newwork settings and try it again.");
-                },
-                complete: function() {
-                    that.leftView.searchLoading.hide();
-                }
-            });
-
-            this.retailerControl.find("span").text(retailerArr[1]);
-        },
+        
         showMessage: function(messages) {
             return $("#action-tips").show().text(messages);
         },
