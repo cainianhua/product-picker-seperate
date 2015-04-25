@@ -334,33 +334,34 @@
                 opts = that.options,
                 retailerId = retailerArr[0];
 
-            that.leftView.searchLoading.show();
+            //that.leftView.searchLoading.show();
             $.ajax({
                 url: "/admin/guides/retailer_products",
                 data: { retailer_id: retailerId },
                 cache: false,
                 dataType: "json",
                 success: function(items) {
-                    that.processResponse(items);
+                    //that.processResponse(items);
                 },
                 error: function() {
-                    alert("There is network error, check your newwork settings and try it again.");
+                    //alert("There is network error, check your newwork settings and try it again.");
                 },
                 complete: function() {
-                    that.leftView.searchLoading.hide();
+                    //that.leftView.searchLoading.hide();
                 }
             });
 
             this.retailerControl.find("span").text(retailerArr[1]);
         },
         processResponse: function(items) {
-        	var available_products = [];
+        	var that = this,
+        		available_products = [];
             $.each(items, function(index, item) {
                 if (!that.rightView.contains(item.id)) {
                     available_products.push(item);
                 }
             });
-            this.leftView.bindProducts(available_products);
+            that.leftView.bindProducts(available_products);
         },
         showMessage: function(messages) {
             return $("#action-tips").show().text(messages);
