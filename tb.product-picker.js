@@ -1,5 +1,4 @@
-// product picker on guide page.
-;(function ($) {
+;(function($) {
     var keys = {
             ESC: 27,
             TAB: 9,
@@ -234,6 +233,12 @@
             this.el.empty().removeData("productfilter");
         }
     };
+
+    $.ProductFilter = ProductFilter;
+});
+
+// product picker on guide page.
+;(function ($) {
     function DataProvider() {}
     DataProvider.prototype = {
         getProducts: function(params, callback) {
@@ -296,7 +301,7 @@
 
             that.retailerControl = $(".retailer", container);
 
-            that.leftView = new ProductFilter($("div.left", container).get(0), {
+            that.leftView = new $.ProductFilter($("div.left", container).get(0), {
                 //products: avaliableRetailerProducts,
                 categories: opts.categories,
                 controlTips: "Double click the below products to add to the current guide:",
@@ -305,7 +310,7 @@
                 }
             });
 
-            that.rightView = new ProductFilter($("div.right", container).get(0), {
+            that.rightView = new $.ProductFilter($("div.right", container).get(0), {
                 products: opts.selectedProducts,
                 categories: opts.categories,
                 controlTips: "Double click the below products to remove from the current guide:",
@@ -366,5 +371,30 @@
             this.el.empty().removeData("productpicker");
         }
     };
-    
+    // Create chainable jQuery plugin:
+    $.fn.productPicker = function (options, args) {
+        var dataKey = 'productpicker';
+        // If function invoked without argument return
+        // instance of the first matched element:
+        if (arguments.length === 0) {
+            return this.first().data(dataKey);
+        }
+        return this.each(function () {
+            var _self = $(this),
+                instance = _self.data(dataKey);
+
+            if (typeof options === 'string') {
+                if (instance && typeof instance[options] === 'function') {
+                    instance[options](args);
+                }
+            } else {
+                // If instance already exists, destroy it:
+                if (instance && instance.dispose) {
+                    instance.dispose();
+                }
+                instance = new ProductPicker(this, options);
+                _self.data(dataKey, instance);
+            }
+        });
+    };
 })(jQuery);
