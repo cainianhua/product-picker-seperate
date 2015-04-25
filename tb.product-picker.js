@@ -361,7 +361,7 @@
                 }
             });
             this.leftView.bindProducts(available_products);
-        }
+        },
         showMessage: function(messages) {
             return $("#action-tips").show().text(messages);
         },
