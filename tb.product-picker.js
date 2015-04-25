@@ -262,7 +262,6 @@
          */
         getProducts: function(params, callback) {
             var that = this,
-                opts = that.options,
                 retailerId = params[0];
 
             $.ajax({
@@ -273,13 +272,13 @@
                 success: function(items) {
                     if (callback) {
                     	callback(null, items);
-                    };
+                    }
                 },
                 error: function() {
                     callback({ code: 501, message: "There is network error, check your newwork settings and try it again." });
                 }
             });
-        },
+        }
     }
 
     function ProductPicker(el, options) {
@@ -316,8 +315,7 @@
         initialize: function() {
             var that = this,
                 opts = that.options,
-                container = that.el,
-                avaliableRetailerProducts = [];
+                container = that.el;
 
             container.html('<h2>Manage Products</h3>'+
                            '<div class="retailer"><label>Retailer Name: </label><span>' + opts.retailerName + '</span></div>'+
@@ -349,11 +347,9 @@
 
             $("#save-button", container).on("click.productpicker", function() {
                 that.hideMessage();
-
                 if (opts.onCompleted) {
                     opts.onCompleted(that.rightView.getCurrentProducts());
                 }
-
                 $.colorbox.close();
             });
         },
@@ -364,20 +360,17 @@
          */
         loadData: function(retailerArr) {
             var that = this,
-                opts = that.options,
                 retailerId = retailerArr[0],
                 dataProvider = new DataProvider();
 
             that.leftView.searchLoading.show();
             dataProvider.getProducts(retailerArr, function(err, products) {
             	that.leftView.searchLoading.hide();
-
             	if (err) {
-            		alert(err.message);
+            		window.alert(err.message);
             		return;
             	}
-
-            	processResponse(products);
+            	that.processResponse(products);
             });
 
             that.retailerControl.find("span").text(retailerArr[1]);
