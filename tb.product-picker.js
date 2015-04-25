@@ -1,14 +1,6 @@
 // product picker on guide page.
 ;(function ($) {
-    var utils = (function () {
-            return {
-                escapeRegExChars: function (value) {
-                    return value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-                }
-            };
-        }()),
-
-        keys = {
+    var keys = {
             ESC: 27,
             TAB: 9,
             RETURN: 13,
@@ -301,8 +293,6 @@
         }
     };
 
-    ProductPicker.utils = utils;
-
     ProductPicker.prototype = {
         /**
          * [initialize description]
@@ -379,12 +369,6 @@
                 }
             });
             that.leftView.bindProducts(available_products);
-        },
-        showMessage: function(messages) {
-            return $("#action-tips").show().text(messages);
-        },
-        hideMessage: function() {
-            return $("#action-tips").hide().text('');
         },
         /**
          * destroy
