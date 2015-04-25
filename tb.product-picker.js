@@ -249,6 +249,39 @@
         }
     };
 
+
+    function DataProvider() {
+
+    }
+
+    DataProvider.prototype = {
+    	/**
+         * [loadData description]
+         * @param  {[type]}
+         * @return {[type]}
+         */
+        getProducts: function(params, callback) {
+            var that = this,
+                opts = that.options,
+                retailerId = params[0];
+
+            $.ajax({
+                url: "/admin/guides/retailer_products",
+                data: { retailer_id: retailerId },
+                cache: false,
+                dataType: "json",
+                success: function(items) {
+                    if (callback) {
+                    	callback(null, items);
+                    };
+                },
+                error: function() {
+                    callback({ code: 501, message: "There is network error, check your newwork settings and try it again." });
+                }
+            });
+        },
+    }
+
     function ProductPicker(el, options) {
         var that = this,
             defaults = {
@@ -332,26 +365,22 @@
         loadData: function(retailerArr) {
             var that = this,
                 opts = that.options,
-                retailerId = retailerArr[0];
+                retailerId = retailerArr[0],
+                dataProvider = new DataProvider();
 
-            //that.leftView.searchLoading.show();
-            $.ajax({
-                url: "/admin/guides/retailer_products",
-                data: { retailer_id: retailerId },
-                cache: false,
-                dataType: "json",
-                success: function(items) {
-                    //that.processResponse(items);
-                },
-                error: function() {
-                    //alert("There is network error, check your newwork settings and try it again.");
-                },
-                complete: function() {
-                    //that.leftView.searchLoading.hide();
-                }
+            that.leftView.searchLoading.show();
+            dataProvider.getProducts(retailerArr, function(err, products) {
+            	that.leftView.searchLoading.hide();
+
+            	if (err) {
+            		alert(err.message);
+            		return;
+            	}
+
+            	processResponse(products);
             });
 
-            this.retailerControl.find("span").text(retailerArr[1]);
+            that.retailerControl.find("span").text(retailerArr[1]);
         },
         processResponse: function(items) {
         	var that = this,
