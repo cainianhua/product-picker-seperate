@@ -62,23 +62,23 @@
 
             that.retailerControl = $(".retailer", container);
 
-            that.leftView = new $.ProductFilter($("div.left", container).get(0), {
+            that.leftView = $("div.left", container).productFilter({
                 //products: avaliableRetailerProducts,
                 categories: opts.categories,
                 controlTips: "Double click the below products to add to the current guide:",
                 onProductDoubleClick: function(li) {
                     that.rightView.addProduct(li);
                 }
-            });
+            }).productFilter();
 
-            that.rightView = new $.ProductFilter($("div.right", container).get(0), {
+            that.rightView = $("div.right", container).productFilter({
                 products: opts.selectedProducts,
                 categories: opts.categories,
                 controlTips: "Double click the below products to remove from the current guide:",
                 onProductDoubleClick: function(li) {
                     that.leftView.addProduct(li);
                 }
-            });
+            }).productFilter();
 
             $("#save-button", container).on("click.productpicker", function() {
                 that.hideMessage();
