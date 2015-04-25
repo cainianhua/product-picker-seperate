@@ -311,16 +311,6 @@
                 $.colorbox.close();
             });
         },
-        processResponse: function(items) {
-        	var that = this,
-        		available_products = [];
-            $.each(items, function(index, item) {
-                if (!that.rightView.contains(item.id)) {
-                    available_products.push(item);
-                }
-            });
-            that.leftView.bindProducts(available_products);
-        },
         showMessage: function(messages) {
             return $("#action-tips").show().text(messages);
         },
