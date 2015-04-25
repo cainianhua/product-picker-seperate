@@ -241,35 +241,6 @@
         }
     };
 
-    function DataProvider() {}
-
-    DataProvider.prototype = {
-    	/**
-         * [loadData description]
-         * @param  {[type]}
-         * @return {[type]}
-         */
-        getProducts: function(params, callback) {
-            var that = this,
-                retailerId = params[0];
-
-            $.ajax({
-                url: "/admin/guides/retailer_products",
-                data: { retailer_id: retailerId },
-                cache: false,
-                dataType: "json",
-                success: function(items) {
-                    if (callback) {
-                    	callback(null, items);
-                    }
-                },
-                error: function() {
-                    callback({ code: 501, message: "There is network error, check your newwork settings and try it again." });
-                }
-            });
-        }
-    }
-
     function ProductPicker(el, options) {
         var that = this,
             defaults = {
