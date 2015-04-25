@@ -236,28 +236,7 @@
 
     // Create chainable jQuery plugin:
     $.fn.productFilter = function (options, args) {
-        var dataKey = 'productfilter';
-        // If function invoked without argument return
-        // instance of the first matched element:
-        if (arguments.length === 0) {
-            return this.first().data(dataKey);
-        }
-        return this.each(function () {
-            var _self = $(this),
-                instance = _self.data(dataKey);
-
-            if (typeof options === 'string') {
-                if (instance && typeof instance[options] === 'function') {
-                    instance[options](args);
-                }
-            } else {
-                // If instance already exists, destroy it:
-                if (instance && instance.dispose) {
-                    instance.dispose();
-                }
-                instance = new ProductFilter(this, options);
-                _self.data(dataKey, instance);
-            }
-        });
+        instance = new ProductFilter(this.first(), options);
+        return this;
     };
 })(jQuery);
