@@ -213,7 +213,6 @@
             if (this.productIds[product_id]) {
                 return true;
             }
-
             return false;
         },
         /**
@@ -238,10 +237,9 @@
     function DataProvider() {}
     DataProvider.prototype = {
         getProducts: function(params, callback) {
-            var retailerId = params[0];
             $.ajax({
                 url: "/admin/guides/retailer_products",
-                data: { retailer_id: retailerId },
+                data: { retailer_id: params[0] },
                 cache: false,
                 dataType: "json",
                 success: function(items) {
@@ -368,30 +366,5 @@
             this.el.empty().removeData("productpicker");
         }
     };
-    // Create chainable jQuery plugin:
-    $.fn.productPicker = function (options, args) {
-        var dataKey = 'productpicker';
-        // If function invoked without argument return
-        // instance of the first matched element:
-        if (arguments.length === 0) {
-            return this.first().data(dataKey);
-        }
-        return this.each(function () {
-            var _self = $(this),
-                instance = _self.data(dataKey);
-
-            if (typeof options === 'string') {
-                if (instance && typeof instance[options] === 'function') {
-                    instance[options](args);
-                }
-            } else {
-                // If instance already exists, destroy it:
-                if (instance && instance.dispose) {
-                    instance.dispose();
-                }
-                instance = new ProductPicker(this, options);
-                _self.data(dataKey, instance);
-            }
-        });
-    };
+    
 })(jQuery);
