@@ -358,7 +358,7 @@
                 that.processResponse(products);
             });
 
-            that.retailerControl.find("span").text(retailerArr[1]);
+            //that.retailerControl.find("span").text(retailerArr[1]);
         },
         processResponse: function(items) {
             var that = this,
