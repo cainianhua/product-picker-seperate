@@ -255,7 +255,7 @@
                 if (instance && instance.dispose) {
                     instance.dispose();
                 }
-                instance = new ProductPicker(this, options);
+                instance = new ProductFilter(this, options);
                 _self.data(dataKey, instance);
             }
         });
