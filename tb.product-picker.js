@@ -342,6 +342,28 @@
                 $.colorbox.close();
             });
         },
+        /**
+         * [loadData description]
+         * @param  {[type]}
+         * @return {[type]}
+         */
+        loadData: function(retailerArr) {
+            var that = this,
+                retailerId = retailerArr[0],
+                dataProvider = new DataProvider();
+
+            that.leftView.searchLoading.show();
+            dataProvider.getProducts(retailerArr, function(err, products) {
+            	that.leftView.searchLoading.hide();
+            	if (err) {
+            		window.alert(err.message);
+            		return;
+            	}
+            	that.processResponse(products);
+            });
+
+            that.retailerControl.find("span").text(retailerArr[1]);
+        },
         processResponse: function(items) {
         	var that = this,
         		available_products = [];
@@ -370,5 +392,32 @@
             this.rightView.dispose();
             this.el.empty().removeData("productpicker");
         }
+    };
+    // Create chainable jQuery plugin:
+    $.fn.productPicker = function (options, args) {
+        var dataKey = 'productpicker';
+        // If function invoked without argument return
+        // instance of the first matched element:
+        if (arguments.length === 0) {
+            return this.first().data(dataKey);
+        }
+
+        return this.each(function () {
+            var callElement = $(this),
+                instance = callElement.data(dataKey);
+
+            if (typeof options === 'string') {
+                if (instance && typeof instance[options] === 'function') {
+                    instance[options](args);
+                }
+            } else {
+                // If instance already exists, destroy it:
+                if (instance && instance.dispose) {
+                    instance.dispose();
+                }
+                instance = new ProductPicker(this, options);
+                callElement.data(dataKey, instance);
+            }
+        });
     };
 })(jQuery);
