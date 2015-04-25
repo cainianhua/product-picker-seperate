@@ -273,6 +273,34 @@
         that.initialize();
     }
 
+    function DataProvider() {}
+
+    DataProvider.prototype = {
+        /**
+         * [loadData description]
+         * @param  {[type]}
+         * @return {[type]}
+         */
+        getProducts: function(params, callback) {
+            var retailerId = params[0];
+
+            $.ajax({
+                url: "/admin/guides/retailer_products",
+                data: { retailer_id: retailerId },
+                cache: false,
+                dataType: "json",
+                success: function(items) {
+                    if (callback) {
+                        callback(null, items);
+                    }
+                },
+                error: function() {
+                    callback({ code: 501, message: "There is network error, check your newwork settings and try it again." });
+                }
+            });
+        }
+    };
+
     ProductPicker.utils = utils;
 
     ProductPicker.prototype = {
@@ -283,8 +311,7 @@
         initialize: function() {
             var that = this,
                 opts = that.options,
-                container = that.el,
-                avaliableRetailerProducts = [];
+                container = that.el;
 
             container.html('<h2>Manage Products</h3>'+
                            '<div class="retailer"><label>Retailer Name: </label><span>' + opts.retailerName + '</span></div>'+
@@ -316,11 +343,9 @@
 
             $("#save-button", container).on("click.productpicker", function() {
                 that.hideMessage();
-
                 if (opts.onCompleted) {
                     opts.onCompleted(that.rightView.getCurrentProducts());
                 }
-
                 $.colorbox.close();
             });
         },
@@ -331,33 +356,29 @@
          */
         loadData: function(retailerArr) {
             var that = this,
-                opts = that.options,
-                retailerId = retailerArr[0];
+                dataProvider = new DataProvider();
 
             that.leftView.searchLoading.show();
-            $.ajax({
-                url: "/admin/guides/retailer_products",
-                data: { retailer_id: retailerId },
-                cache: false,
-                dataType: "json",
-                success: function(items) {
-                    var available_products = [];
-                    $.each(items, function(index, item) {
-                        if (!that.rightView.contains(item.id)) {
-                            available_products.push(item);
-                        }
-                    });
-                    that.leftView.bindProducts(available_products);
-                },
-                error: function() {
-                    alert("There is network error, check your newwork settings and try it again.");
-                },
-                complete: function() {
-                    that.leftView.searchLoading.hide();
+            dataProvider.getProducts(retailerArr, function(err, products) {
+                that.leftView.searchLoading.hide();
+                if (err) {
+                    window.alert(err.message);
+                    return;
                 }
+                that.processResponse(products);
             });
 
-            //this.retailerControl.find("span").text(retailerArr[1]);
+            //that.retailerControl.find("span").text(retailerArr[1]);
+        },
+        processResponse: function(items) {
+            var that = this,
+                available_products = [];
+            $.each(items, function(index, item) {
+                if (!that.rightView.contains(item.id)) {
+                    available_products.push(item);
+                }
+            });
+            that.leftView.bindProducts(available_products);
         },
         showMessage: function(messages) {
             return $("#action-tips").show().text(messages);
