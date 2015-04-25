@@ -235,7 +235,7 @@
     };
 
     $.ProductFilter = ProductFilter;
-});
+})(jQuery);
 
 // product picker on guide page.
 ;(function ($) {
