@@ -294,8 +294,6 @@
         that.initialize();
     }
 
-    ProductPicker.utils = utils;
-
     ProductPicker.prototype = {
         /**
          * [initialize description]
@@ -340,24 +338,6 @@
                     opts.onCompleted(that.rightView.getCurrentProducts());
                 }
                 $.colorbox.close();
-            });
-        },
-        /**
-         * [loadData description]
-         * @param  {[type]}
-         * @return {[type]}
-         */
-        loadData: function() {
-            var that = this,
-                retailerId = retailerArr[0],
-                dataProvider = new DataProvider();
-
-            dataProvider.getProducts(retailerArr, function(err, products) {
-            	if (err) {
-            		window.alert(err.message);
-            		return;
-            	}
-            	that.processResponse(products);
             });
         },
         processResponse: function(items) {
