@@ -342,28 +342,6 @@
                 $.colorbox.close();
             });
         },
-        /**
-         * [loadData description]
-         * @param  {[type]}
-         * @return {[type]}
-         */
-        loadData: function(retailerArr) {
-            var that = this,
-                retailerId = retailerArr[0],
-                dataProvider = new DataProvider();
-
-            that.leftView.searchLoading.show();
-            dataProvider.getProducts(retailerArr, function(err, products) {
-            	that.leftView.searchLoading.hide();
-            	if (err) {
-            		window.alert(err.message);
-            		return;
-            	}
-            	that.processResponse(products);
-            });
-
-            that.retailerControl.find("span").text(retailerArr[1]);
-        },
         processResponse: function(items) {
         	var that = this,
         		available_products = [];
