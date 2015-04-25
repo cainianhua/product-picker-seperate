@@ -241,30 +241,6 @@
         }
     };
 
-    function ProductPicker(el, options) {
-        var that = this,
-            defaults = {
-                selectedProducts: [],   // products have been selected.
-                categories: [],         // all categories of product.
-                guideId: null,
-                retailerId: null,       // retailer id
-                retailerName: "",
-                onCompleted: function() {}
-            };
-
-        // Shared variables;
-        that.element = el;
-        that.el = $(el);
-        that.options = $.extend({}, defaults, options);
-
-        that.leftView = null;
-        that.rightView = null;
-        that.retailerControl = null;
-
-        // Initialize:
-        that.initialize();
-    }
-
     function DataProvider() {}
 
     DataProvider.prototype = {
@@ -292,6 +268,30 @@
             });
         }
     };
+
+    function ProductPicker(el, options) {
+        var that = this,
+            defaults = {
+                selectedProducts: [],   // products have been selected.
+                categories: [],         // all categories of product.
+                guideId: null,
+                retailerId: null,       // retailer id
+                retailerName: "",
+                onCompleted: function() {}
+            };
+
+        // Shared variables;
+        that.element = el;
+        that.el = $(el);
+        that.options = $.extend({}, defaults, options);
+
+        that.leftView = null;
+        that.rightView = null;
+        that.retailerControl = null;
+
+        // Initialize:
+        that.initialize();
+    }
 
     ProductPicker.prototype = {
         /**
@@ -382,32 +382,5 @@
             this.rightView.dispose();
             this.el.empty().removeData("productpicker");
         }
-    };
-    // Create chainable jQuery plugin:
-    $.fn.productPicker = function (options, args) {
-        var dataKey = 'productpicker';
-        // If function invoked without argument return
-        // instance of the first matched element:
-        if (arguments.length === 0) {
-            return this.first().data(dataKey);
-        }
-
-        return this.each(function () {
-            var callElement = $(this),
-                instance = callElement.data(dataKey);
-
-            if (typeof options === 'string') {
-                if (instance && typeof instance[options] === 'function') {
-                    instance[options](args);
-                }
-            } else {
-                // If instance already exists, destroy it:
-                if (instance && instance.dispose) {
-                    instance.dispose();
-                }
-                instance = new ProductPicker(this, options);
-                callElement.data(dataKey, instance);
-            }
-        });
     };
 })(jQuery);
