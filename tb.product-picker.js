@@ -135,13 +135,13 @@
     // Create chainable jQuery plugin:
     $.fn.productPicker = function (options, args) {
         var cacheKey = 'productpicker',
-            firstElement = this.first();
+            firstElement = this.first(),
+            instance = firstElement.data(cacheKey);
 
         if (arguments.length === 0) {
-            return firstElement.data(cacheKey);
+            return instance;
         }
 
-        instance = firstElement.data(cacheKey);
         if (typeof options === 'string') {
             if (instance && typeof instance[options] === 'function') {
                 instance[options](args);
@@ -151,8 +151,7 @@
             if (instance && instance.dispose) {
                 instance.dispose();
             }
-            instance = new ProductPicker(this, options);
-            firstElement.data(cacheKey, instance);
+            firstElement.data(cacheKey, new ProductPicker(this, options));
         }
 
         return firstElement;
