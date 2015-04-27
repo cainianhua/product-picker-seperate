@@ -134,28 +134,27 @@
     };
     // Create chainable jQuery plugin:
     $.fn.productPicker = function (options, args) {
-        var dataKey = 'productpicker';
-        // If function invoked without argument return
-        // instance of the first matched element:
-        if (arguments.length === 0) {
-            return this.first().data(dataKey);
-        }
-        return this.each(function () {
-            var _self = $(this),
-                instance = _self.data(dataKey);
+        var cacheKey = 'productpicker',
+            firstElement = this.first();
 
-            if (typeof options === 'string') {
-                if (instance && typeof instance[options] === 'function') {
-                    instance[options](args);
-                }
-            } else {
-                // If instance already exists, destroy it:
-                if (instance && instance.dispose) {
-                    instance.dispose();
-                }
-                instance = new ProductPicker(this, options);
-                _self.data(dataKey, instance);
+        if (arguments.length === 0) {
+            return firstElement.data(cacheKey);
+        }
+
+        instance = firstElement.data(cacheKey);
+        if (typeof options === 'string') {
+            if (instance && typeof instance[options] === 'function') {
+                instance[options](args);
             }
-        });
+        }
+        else {
+            if (instance && instance.dispose) {
+                instance.dispose();
+            }
+            instance = new ProductPicker(this, options);
+            firstElement.data(cacheKey, instance);
+        }
+
+        return firstElement;
     };
 })(jQuery);
